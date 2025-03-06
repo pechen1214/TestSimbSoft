@@ -2,10 +2,10 @@ import time
 import unittest
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from pages.test_page import TestPage
 
-class TodosMyTests(unittest.TestCase):
+
+class MyTests(unittest.TestCase):
     page_url = 'https://practice-automation.com/form-fields/'
 
     def setUp(self) -> None:
@@ -18,53 +18,49 @@ class TodosMyTests(unittest.TestCase):
 
         self.driver.get(self.page_url)
 
+        self.page = TestPage(self.driver)
+
     def tearDown(self) -> None:
         self.driver.quit()
 
         super().tearDown()
 
-
     ## Тестовое задание
-    def test_AddTaskSpaceCharacter_NoElementsInTheList(self):
+    def test_simbir_soft(self):
         userName = 'Andrey'
-        arrayAutomationTool = []
+        userPassword = 'password'
+        userEmail = userName.lower()+'@example.com'
 
-        name = self.driver.find_element(By.XPATH, '//*[@id="name-input"]')
-        name.send_keys(userName)
-
-        password = self.driver.find_element(By.CSS_SELECTOR,'input[type=password]')
-        password.send_keys('password')
-
-        checkboxMilk = self.driver.find_element(By.CSS_SELECTOR, '#drink2')
-        checkboxMilk.click()
-
-        checkboxCoffe = self.driver.find_element(By.CSS_SELECTOR, '#drink3')
-        checkboxCoffe.click()
-
-        radioYellow = self.driver.find_element(By.XPATH, '//*[@id="color3"]')
-        radioYellow.is_selected()
-
-        selectLikeAutomation = Select(self.driver.find_element(By.ID, 'automation'))
-        selectLikeAutomation.select_by_value('yes')
-
-        email = self.driver.find_element(By.ID, 'email')
-        email.send_keys(userName.lower()+'@example.com')
+        self.page.input_user_name(userName)
         time.sleep(2)
 
-        listAutomationTools = self.driver.find_elements(By.CSS_SELECTOR, 'form ul>li')
-        message = self.driver.find_element(By.ID, 'message')
-        for automationTool in listAutomationTools:
-            arrayAutomationTool.append(automationTool.text)
-        maxAutomationTool = max(arrayAutomationTool,key=len)
-        lenlistAutomationTools = len(listAutomationTools)
-        message.send_keys('Kоличество инструментов, описанных в пункте Automation tools - '+str(lenlistAutomationTools)+'\nИнструмент из списка Automation tools, содержащий наибольшее количество символов - '+ maxAutomationTool)
-        time.sleep(5)
+        self.page.input_user_password(userPassword)
+        time.sleep(2)
 
-        buttonSubmit = self.driver.find_element(By.CSS_SELECTOR, '#submit-btn')
-        buttonSubmit.click()
-        time.sleep(10)
+        self.page.click_checkbox_milk()
+        time.sleep(2)
+
+        self.page.click_checkbox_coffe()
+        time.sleep(2)
+
+        self.page.click_radio_yellow()
+        time.sleep(2)
+
+        self.page.select_likeAutomation_yes()
+        time.sleep(2)
+
+        self.page.input_user_email(userEmail)
+        time.sleep(2)
+
+        maxAutomationTool = self.page.get_max_automationTools()
+        lenlistAutomationTools = self.page.get_lenght_automationTools()
+        time.sleep(2)
+
+        self.page.input_message(maxAutomationTool, lenlistAutomationTools)
+        time.sleep(2)
+
+        self.page.click_button_submit()
+        time.sleep(2)
 
         alert = self.driver.switch_to.alert
-        print(alert.text)
         self.assertEqual('Message received!', alert.text)
-        time.sleep(10)
