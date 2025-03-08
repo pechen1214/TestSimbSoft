@@ -1,3 +1,4 @@
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import Select
 from locators.test_page_locators import TestPageLocators
 
@@ -8,6 +9,7 @@ class TestPage:
         self.driver = driver
 
     def input_user_name(self, userName):
+
         name = self.driver.find_element(*TestPageLocators.input_name)
         name.send_keys(userName)
 
@@ -25,7 +27,8 @@ class TestPage:
 
     def click_radio_yellow(self):
         radioYellow = self.driver.find_element(*TestPageLocators.radio_favoriteColor_yellow)
-        radioYellow.click()
+        move = ActionChains(self.driver)
+        move.move_to_element(radioYellow).click().perform()
 
     def select_likeAutomation_yes(self):
         selectLikeAutomation = Select(self.driver.find_element(*TestPageLocators.select_automation))
@@ -33,6 +36,8 @@ class TestPage:
 
     def input_user_email(self, userEmail):
         email = self.driver.find_element(*TestPageLocators.input_email)
+        move = ActionChains(self.driver)
+        move.move_to_element(email).perform()
         email.send_keys(userEmail)
 
     def get_max_automationTools(self):
@@ -48,8 +53,11 @@ class TestPage:
 
     def input_message(self, maxAutomationTool, lenlistAutomationTools):
         message = self.driver.find_element(*TestPageLocators.input_message)
+        move = ActionChains(self.driver)
+        move.move_to_element(message).perform()
         message.send_keys('Kоличество инструментов, описанных в пункте Automation tools - ' + str(lenlistAutomationTools) + '\nИнструмент из списка Automation tools, содержащий наибольшее количество символов - ' + maxAutomationTool)
 
     def click_button_submit(self):
         buttonSubmit = self.driver.find_element(*TestPageLocators.button_submit)
-        buttonSubmit.click()
+        move = ActionChains(self.driver)
+        move.move_to_element(buttonSubmit).click().perform()
